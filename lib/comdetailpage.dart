@@ -40,7 +40,7 @@ class CommunityDetailsPage extends StatelessWidget {
             _buildTile('Item Ledger', Icons.archive, () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ItemLedgerPage()),
+            MaterialPageRoute(builder: (context) => ItemLendingApp()),
           );
         }),
         _buildTile('Money Ledger', Icons.money, () {
