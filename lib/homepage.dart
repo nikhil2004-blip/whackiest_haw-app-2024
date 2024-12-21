@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:haw/guard_tracking.dart';
 import 'ad.dart';  // Import the AppDrawer widget
 import 'item.dart';  // Replace with your actual import for Item Ledger
 import 'money.dart';  // Replace with your actual import for Money Ledger
@@ -63,6 +64,12 @@ class _HomePageState extends State<HomePage> {
                     Icons.report_problem,
                     ComplaintBoxApp(),  // Replace with your actual Complaint Room page
                   ),
+                  _buildTile(
+                    'Guard Tracking',
+                    Icons.map,
+                    GuardMap(), // Replace with your actual Guard Tracking page
+                    //isSpecial: true, // Add a flag for special styling if needed
+                  ),
                 ],
               ),
             ),
@@ -72,11 +79,11 @@ class _HomePageState extends State<HomePage> {
               children: [
                 FloatingActionButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/guardTracking');
+                    //Navigator.pushNamed(context, '/guardTracking');
                   },
-                  child: Icon(Icons.map),
+                  child: Icon(Icons.handyman_outlined),
                   backgroundColor: Colors.orangeAccent,
-                  tooltip: 'Guard Tracking',
+                  tooltip: '',
                 ),
               ],
             ),
