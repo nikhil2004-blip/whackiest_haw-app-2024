@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         '/profile': (context) => ProfilePage(),
         '/settings': (context) => SettingsPage(), // Settings page route
         '/login': (context) => LoginPage(), // Ensure /login route is defined
-        '/guardTracking': (context) => GuardTrackingPage(),
+        '/guardTracking': (context) => GuardMap(),
 
       },
     );
