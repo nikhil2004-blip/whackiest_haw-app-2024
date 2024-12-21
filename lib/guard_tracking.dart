@@ -142,7 +142,7 @@ class _GuardMapState extends State<GuardMap> {
                       _updateZoneState(zone.id, newState);
 
                       if (newState) {
-                        Timer(Duration(seconds: 90), () {
+                        Timer(Duration(seconds: 5), () {
                           setState(() {
                             maskedZones[zone.id] = false;
                             guardLabels.remove(zone.id);
