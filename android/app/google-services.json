@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "445115949676",
+    "project_id": "hawmain-16199",
+    "storage_bucket": "hawmain-16199.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445115949676:android:53deda22ae4b482f902e49",
+        "android_client_info": {
+          "package_name": "com.example.haw"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdk7rCnOMGhAvMNY7xe2g0ZecnrJmeDyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
