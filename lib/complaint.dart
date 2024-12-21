@@ -29,9 +29,9 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen> {
   final TextEditingController _complaintController = TextEditingController();
 
   // Editable email addresses
-  String wardenEmail = 'warden@hostel.com'; // Editable Warden email
-  String supervisorEmail = 'supervisor@hostel.com'; // Editable Supervisor email
-  String defaultEmail = 'admin@hostel.com'; // Editable Default email
+  String wardenEmail = 'warden@hostel.com';
+  String supervisorEmail = 'supervisor.dummy404@gmail.com';
+  String defaultEmail = 'sbiy6996@gmail.com';
 
   // Function to handle sending email
   Future<void> _sendEmail() async {
@@ -45,24 +45,25 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen> {
       recipientEmail = defaultEmail;
     }
 
-    final smtpServer = gmail('your-email@gmail.com', 'your-app-password'); // Replace with your email and app-specific password
+    // Replace with your email and app password
+    final smtpServer = gmail('sbiy6996@gmail.com', 'formalcharge');
 
     final message = Message()
-      ..from = Address('your-email@gmail.com', 'Your Name') // Replace with your email and name
-      ..recipients.add(recipientEmail)
-      ..subject = 'Complaint to $selectedPerson'
-      ..text = _complaintController.text;
+      ..from = Address('sbiy6996@gmail.com', 'Complaint Box') // Sender details
+      ..recipients.add(recipientEmail) // Recipient email
+      ..subject = 'Complaint to $selectedPerson' // Email subject
+      ..text = _complaintController.text; // Complaint content
 
     try {
-      final sendReport = await send(message, smtpServer);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Complaint sent successfully!'),
-      ));
-      _complaintController.clear(); // Clear the complaint after sending
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Failed to send complaint. Please try again!'),
-      ));
+      await send(message, smtpServer);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Complaint sent successfully!')),
+      );
+      _complaintController.clear(); // Clear the text field
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to send complaint: $e')),
+      );
     }
   }
 
@@ -119,7 +120,15 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen> {
             // Submit button
             Center(
               child: ElevatedButton(
-                onPressed: _sendEmail,
+                onPressed: () {
+                  if (_complaintController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Complaint cannot be empty!')),
+                    );
+                  } else {
+                    _sendEmail();
+                  }
+                },
                 child: Text('Submit Complaint'),
               ),
             ),

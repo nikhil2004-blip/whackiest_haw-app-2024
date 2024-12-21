@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                   _buildTile(
                     'Complaint Room',
                     Icons.report_problem,
-                    ComplaintRoomPage(),  // Replace with your actual Complaint Room page
+                    ComplaintBoxApp(),  // Replace with your actual Complaint Room page
                   ),
                 ],
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart'; // Import for orientation lock
 import 'dart:async';
 
 class GuardMap extends StatefulWidget {
@@ -10,8 +11,9 @@ class GuardMap extends StatefulWidget {
 class _GuardMapState extends State<GuardMap> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Map<String, bool> maskedZones = {};
+  final Map<String, String> guardLabels = {}; // Stores labels for masked zones
+  int guardCounter = 1; // Counter for assigning guard numbers
 
-  // Define zones with relative positions and sizes (as percentages)
   final List<Zone> zones = [
     Zone(id: 'zone1', left: 0 / 2390, top: 0 / 1120, width: (250 + 160) / 2390, height: (150 + 160) / 1120),
     Zone(id: 'zone2', left: 0 / 2390, top: 230 / 1120, width: (250 + 160) / 2390, height: (500 + 160) / 1120),
@@ -30,11 +32,31 @@ class _GuardMapState extends State<GuardMap> {
   @override
   void initState() {
     super.initState();
+    _lockOrientation();
     _loadZoneData();
     _setupRealTimeUpdates();
   }
 
-  // Load initial zone data from Firestore
+  @override
+  void dispose() {
+    _unlockOrientation();
+    super.dispose();
+  }
+
+  Future<void> _lockOrientation() async {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
+  }
+
+  Future<void> _unlockOrientation() async {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
   Future<void> _loadZoneData() async {
     try {
       final snapshot = await _firestore.collection('zones').get();
@@ -48,7 +70,6 @@ class _GuardMapState extends State<GuardMap> {
     }
   }
 
-  // Set up real-time updates
   void _setupRealTimeUpdates() {
     _firestore.collection('zones').snapshots().listen((snapshot) {
       setState(() {
@@ -59,7 +80,6 @@ class _GuardMapState extends State<GuardMap> {
     });
   }
 
-  // Update zone state in Firestore
   Future<void> _updateZoneState(String zoneId, bool masked) async {
     try {
       await _firestore.collection('zones').doc(zoneId).set({'masked': masked});
@@ -70,77 +90,100 @@ class _GuardMapState extends State<GuardMap> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Image's original aspect ratio
-        const double imageAspectRatio = 2390 / 1120;
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          const double imageAspectRatio = 2390 / 1120;
+          final double containerWidth = constraints.maxWidth;
+          final double containerHeight = constraints.maxHeight;
+          double imageWidth, imageHeight;
 
-        // Calculate the actual dimensions of the image
-        final double containerWidth = constraints.maxWidth;
-        final double containerHeight = constraints.maxHeight;
-        double imageWidth, imageHeight;
+          if (containerWidth / containerHeight > imageAspectRatio) {
+            imageHeight = containerHeight;
+            imageWidth = imageHeight * imageAspectRatio;
+          } else {
+            imageWidth = containerWidth;
+            imageHeight = imageWidth / imageAspectRatio;
+          }
 
-        if (containerWidth / containerHeight > imageAspectRatio) {
-          // Container is wider than the image's aspect ratio
-          imageHeight = containerHeight;
-          imageWidth = imageHeight * imageAspectRatio;
-        } else {
-          // Container is taller than the image's aspect ratio
-          imageWidth = containerWidth;
-          imageHeight = imageWidth / imageAspectRatio;
-        }
+          final double horizontalOffset = (containerWidth - imageWidth) / 2;
+          final double verticalOffset = (containerHeight - imageHeight) / 2;
 
-        final double horizontalOffset = (containerWidth - imageWidth) / 2;
-        final double verticalOffset = (containerHeight - imageHeight) / 2;
-
-        return Stack(
-          children: [
-            // Display the map image
-            Positioned(
-              left: horizontalOffset,
-              top: verticalOffset,
-              width: imageWidth,
-              height: imageHeight,
-              child: Image.asset(
-                'assets/guard_map.png',
-                fit: BoxFit.fill,
-              ),
-            ),
-            // Overlay the masks directly on top of the image
-            for (final zone in zones)
+          return Stack(
+            children: [
               Positioned(
-                left: horizontalOffset + zone.left * imageWidth,
-                top: verticalOffset + zone.top * imageHeight,
-                width: zone.width * imageWidth,
-                height: zone.height * imageHeight,
-                child: GestureDetector(
-                  onTap: () {
-                    final newState = !(maskedZones[zone.id] ?? false);
-                    setState(() {
-                      maskedZones[zone.id] = newState;
-                    });
-                    _updateZoneState(zone.id, newState);
-
-                    // Automatically reset the zone after 90 seconds
-                    if (newState) {
-                      Timer(Duration(seconds: 90), () {
-                        setState(() {
-                          maskedZones[zone.id] = false;
-                        });
-                        _updateZoneState(zone.id, false);
-                      });
-                    }
-                  },
-                  child: Container(
-                    color: (maskedZones[zone.id] ?? false)
-                        ? Colors.red.withOpacity(0.5)
-                        : Colors.transparent,
-                  ),
+                left: horizontalOffset,
+                top: verticalOffset,
+                width: imageWidth,
+                height: imageHeight,
+                child: Image.asset(
+                  'assets/guard_map.png',
+                  fit: BoxFit.fill,
                 ),
               ),
-          ],
-        );
-      },
+              for (final zone in zones)
+                Positioned(
+                  left: horizontalOffset + zone.left * imageWidth,
+                  top: verticalOffset + zone.top * imageHeight,
+                  width: zone.width * imageWidth,
+                  height: zone.height * imageHeight,
+                  child: GestureDetector(
+                    onTap: () {
+                      final newState = !(maskedZones[zone.id] ?? false);
+                      setState(() {
+                        maskedZones[zone.id] = newState;
+                        if (newState) {
+                          guardLabels[zone.id] = '';
+                        } else {
+                          guardLabels.remove(zone.id);
+                        }
+                      });
+                      _updateZoneState(zone.id, newState);
+
+                      if (newState) {
+                        Timer(Duration(seconds: 90), () {
+                          setState(() {
+                            maskedZones[zone.id] = false;
+                            guardLabels.remove(zone.id);
+                          });
+                          _updateZoneState(zone.id, false);
+                        });
+                      }
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: (maskedZones[zone.id] ?? false)
+                                ? Colors.red.withOpacity(0.5)
+                                : Colors.transparent,
+                            border: Border.all(
+                              color: (maskedZones[zone.id] ?? false)
+                                  ? Colors.black
+                                  : Colors.transparent,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                        if (guardLabels.containsKey(zone.id))
+                          Text(
+                            guardLabels[zone.id]!,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
