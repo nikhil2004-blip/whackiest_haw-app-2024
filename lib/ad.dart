@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'set.dart'; // Import the settings page
+import 'members.dart';
 
 class AppDrawer extends StatelessWidget {
   final User? currentUser;
@@ -48,19 +49,28 @@ class AppDrawer extends StatelessWidget {
                   ),
                 ),
               ),
-              ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Settings'),
-                onTap: () {
-                  Navigator.pushNamed(context, '/settings'); // Use push instead of pushReplacementNamed
-                },
 
-              ),
               ListTile(
                 leading: Icon(Icons.person),
                 title: Text('Profile'),
                 onTap: () {
                   Navigator.pushNamed(context, '/profile');
+                },
+
+              ),
+              ListTile(
+                leading: Icon(Icons.group),
+                title: Text('Members'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/members');
+                },
+
+              ),
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: Text('Settings'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/settings'); // Use push instead of pushReplacementNamed
                 },
 
               ),
@@ -72,6 +82,7 @@ class AppDrawer extends StatelessWidget {
                   Navigator.pushReplacementNamed(context, '/');
                 },
               ),
+
             ],
           );
         },

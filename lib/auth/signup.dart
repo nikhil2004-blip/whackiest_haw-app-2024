@@ -34,6 +34,8 @@ class _SignUpPageState extends State<SignUpPage> {
   List<String> branchOptions = [
     'Civil Engineering',
     'Computer Science and Engineering',
+    'CSE AIML',
+    'CSE CYBER',
     'Electrical and Electronics Eng',
     'Electronics and Instrumentation Eng',
     'Information Science and Engineering',

@@ -7,6 +7,7 @@ import 'profile.dart'; // Import the ProfilePage
 import 'set.dart'; // Import SettingsPage
 import 'package:firebase_auth/firebase_auth.dart';
 import 'guard_tracking.dart';// For checking if the user is logged in
+import 'members.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => SettingsPage(), // Settings page route
         '/login': (context) => LoginPage(), // Ensure /login route is defined
         '/guardTracking': (context) => GuardMap(),
+        '/members': (context) => MembersPage(),
 
       },
     );
