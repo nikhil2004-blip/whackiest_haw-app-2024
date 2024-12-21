@@ -133,12 +133,22 @@ class _AddItemScreenState extends State<AddItemScreen> {
 
   void _fetchOwners() async {
     final usersCollection = FirebaseFirestore.instance.collection('users');
-    final snapshot = await usersCollection.get();
+    final currentUser = FirebaseAuth.instance.currentUser;
 
-    setState(() {
-      _owners = snapshot.docs.map((doc) => doc['nickname'] as String).toList();
-    });
+    if (currentUser != null) {
+      final currentUserDoc = await usersCollection.doc(currentUser.uid).get();
+      final currentUserNickname = currentUserDoc['nickname'];
+
+      final snapshot = await usersCollection.get();
+      setState(() {
+        _owners = snapshot.docs
+            .map((doc) => doc['nickname'] as String)
+            .where((nickname) => nickname != currentUserNickname)
+            .toList();
+      });
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
