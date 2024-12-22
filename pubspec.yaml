@@ -45,6 +45,8 @@ dependencies:
   mailer: ^6.3.0
   firebase_database: ^11.2.0
   vibration: ^2.0.1
+  file_picker: ^8.1.6
+  firebase_storage: ^12.3.7
 
 
 dev_dependencies:

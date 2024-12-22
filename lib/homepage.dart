@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                   _buildTile('Item Ledger', Icons.inventory_2, ItemLendingApp()),
                   _buildTile('Money Ledger', Icons.attach_money, MoneyLedgerPage()),
                   _buildTile('Chat Room', Icons.chat, ChatPage()),
-                  _buildTile('Exam Room', Icons.school, ExamRoomPage()),
+                  _buildTile('Exam Room', Icons.school, ExamRoomPage(userId: '',)),
                   _buildTile('Complaint Room', Icons.report_problem, ComplaintBoxApp()),
                   _buildTile('Guard Tracking', Icons.map, GuardMap()),
                 ],
