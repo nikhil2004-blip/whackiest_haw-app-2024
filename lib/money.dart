@@ -90,7 +90,8 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Expense Tracker'),
+        backgroundColor: Color(0xFF2D3250), // Dark Blue (AppBar background)
+        title: Text('Money Ledger',style: TextStyle(color: Colors.white)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -98,14 +99,34 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
           children: [
             TextField(
               controller: _descriptionController,
-              decoration: InputDecoration(labelText: 'Expense Description'),
+              decoration: InputDecoration(
+                labelText: 'Expense Description',
+                labelStyle: TextStyle(color: Color(0xFF424769)), // Darker Blue for text labels
+                filled: true,
+                fillColor: Colors.white, // White background for the text field
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF676F9D)), // Muted Blue
+                ),
+                border: OutlineInputBorder(),
+              ),
             ),
+            SizedBox(height: 10),
             TextField(
               controller: _amountController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Amount'),
+              decoration: InputDecoration(
+                labelText: 'Amount',
+                labelStyle: TextStyle(color: Color(0xFF424769)),
+                filled: true,
+                fillColor: Colors.white,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF676F9D)), // Muted Blue
+                ),
+                border: OutlineInputBorder(),
+              ),
             ),
-            // Modified to handle displaying nicknames for selecting the payer
+            SizedBox(height: 10),
+            // Payer dropdown button with Muted Blue
             DropdownButton<String>(
               value: _selectedPayer,
               hint: Text('Select Payer'),
@@ -116,19 +137,26 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
               },
               items: members.map<DropdownMenuItem<String>>((member) {
                 return DropdownMenuItem<String>(
-                  value: member['id'], // Use member ID for selection
-                  child: Text(member['nickname']), // Use 'nickname' for display
+                  value: member['id'],
+                  child: Text(
+                    member['nickname'], // Show nickname here
+                    style: TextStyle(color: Color(0xFF2D3250)), // Dark Blue for text
+                  ),
                 );
               }).toList(),
             ),
             SizedBox(height: 10),
-            // Modified to display nicknames for contributors
+            // Contributor Filter Chips
             Wrap(
               spacing: 8.0,
               children: members.map((member) {
                 return FilterChip(
-                  label: Text(member['nickname']), // Use 'nickname' for display
+                  label: Text(
+                    member['nickname'], // Show nickname
+                    style: TextStyle(color: Colors.black45),
+                  ),
                   selected: _selectedContributors.contains(member['id']),
+                  selectedColor: Color(0xFF676F9D), // Muted Blue for selected chips
                   onSelected: (selected) {
                     setState(() {
                       if (selected) {
@@ -142,11 +170,16 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
               }).toList(),
             ),
             SizedBox(height: 20),
+            // Add Expense button
             ElevatedButton(
               onPressed: _addExpense,
-              child: Text('Add Expense'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF676F9D), // Muted Blue button color
+              ),
+              child: Text('Add Expense', style: TextStyle(color: Colors.white)),
             ),
             SizedBox(height: 20),
+            // List of users and their balances
             Expanded(
               child: StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid).snapshots(),
@@ -172,11 +205,18 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
                       String? userNickname = members.firstWhere((member) => member['id'] == userId)['nickname'];
 
                       return Card(
+                        color: Color(0xFF2D3250), // Dark Blue for card background
                         elevation: 5,
                         margin: EdgeInsets.symmetric(vertical: 10),
                         child: ListTile(
-                          title: Text(userNickname ?? 'Unknown'), // Display the nickname
-                          subtitle: Text('Balance: ₹${amount.toStringAsFixed(2)}'),
+                          title: Text(
+                            userNickname ?? 'Unknown',
+                            style: TextStyle(color: Colors.white), // White text for the title
+                          ),
+                          subtitle: Text(
+                            'Balance: ₹${amount.toStringAsFixed(2)}',
+                            style: TextStyle(color: Colors.white70), // Lighter white for balance text
+                          ),
                         ),
                       );
                     },
