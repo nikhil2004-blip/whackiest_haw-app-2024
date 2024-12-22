@@ -11,6 +11,7 @@ class ComplaintBoxApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Complaint Box',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // Use the new colorScheme property instead of accentColor
         colorScheme: ColorScheme.light(
@@ -112,76 +113,78 @@ class _ComplaintFormScreenState extends State<ComplaintFormScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Warden and Supervisor selection
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ChoiceChip(
-                  label: Text(
-                    'Warden',
-                    style: TextStyle(color: selectedPerson == 'Warden' ? Colors.white : Colors.black), // Text is black initially, white when selected
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Warden and Supervisor selection
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ChoiceChip(
+                    label: Text(
+                      'Warden',
+                      style: TextStyle(color: selectedPerson == 'Warden' ? Colors.white : Colors.black), // Text is black initially, white when selected
+                    ),
+                    selected: selectedPerson == 'Warden',
+                    selectedColor: Color(0xFF676F9D), // Soft purple-blue when selected
+                    onSelected: (selected) {
+                      setState(() {
+                        selectedPerson = 'Warden';
+                      });
+                    },
                   ),
-                  selected: selectedPerson == 'Warden',
-                  selectedColor: Color(0xFF676F9D), // Soft purple-blue when selected
-                  onSelected: (selected) {
-                    setState(() {
-                      selectedPerson = 'Warden';
-                    });
-                  },
-                ),
-                SizedBox(width: 16),
-                ChoiceChip(
-                  label: Text(
-                    'Supervisor',
-                    style: TextStyle(color: selectedPerson == 'Supervisor' ? Colors.white : Colors.black), // Text is black initially, white when selected
+                  SizedBox(width: 16),
+                  ChoiceChip(
+                    label: Text(
+                      'Supervisor',
+                      style: TextStyle(color: selectedPerson == 'Supervisor' ? Colors.white : Colors.black), // Text is black initially, white when selected
+                    ),
+                    selected: selectedPerson == 'Supervisor',
+                    selectedColor: Color(0xFF676F9D), // Soft purple-blue when selected
+                    onSelected: (selected) {
+                      setState(() {
+                        selectedPerson = 'Supervisor';
+                      });
+                    },
                   ),
-                  selected: selectedPerson == 'Supervisor',
-                  selectedColor: Color(0xFF676F9D), // Soft purple-blue when selected
-                  onSelected: (selected) {
-                    setState(() {
-                      selectedPerson = 'Supervisor';
-                    });
+                ],
+              ),
+              SizedBox(height: 20),
+
+              // Complaint text area
+              TextField(
+                controller: _complaintController,
+                decoration: InputDecoration(
+                  labelText: 'Write your complaint here',
+                  hintText: 'Enter your complaint',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 6,
+              ),
+              SizedBox(height: 20),
+
+              // Submit button with updated color
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_complaintController.text.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Complaint cannot be empty!')),
+                      );
+                    } else {
+                      _sendEmail();
+                    }
                   },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFF9B17A), // Set the button color to light orange (#F9B17A)
+                    foregroundColor: Color(0xFF424769), // Text color of the button
+                  ),
+                  child: Text('Submit Complaint'),
                 ),
-              ],
-            ),
-            SizedBox(height: 20),
-
-            // Complaint text area
-            TextField(
-              controller: _complaintController,
-              decoration: InputDecoration(
-                labelText: 'Write your complaint here',
-                hintText: 'Enter your complaint',
-                border: OutlineInputBorder(),
               ),
-              maxLines: 6,
-            ),
-            SizedBox(height: 20),
-
-            // Submit button with updated color
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  if (_complaintController.text.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Complaint cannot be empty!')),
-                    );
-                  } else {
-                    _sendEmail();
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFF9B17A), // Set the button color to light orange (#F9B17A)
-                  foregroundColor: Color(0xFF424769), // Text color of the button
-                ),
-                child: Text('Submit Complaint'),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

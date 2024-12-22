@@ -202,7 +202,12 @@ class _ChatPageState extends State<ChatPage> {
               children: [
                 Expanded(
                   child: TextField(
+                    minLines: 1,
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    textInputAction: TextInputAction.newline,
                     controller: _controller,
+                    onTap:_scrollToBottom,
                     decoration: InputDecoration(
                       hintText: 'Enter your message',
                       filled: true,
