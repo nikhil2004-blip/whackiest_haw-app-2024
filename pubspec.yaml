@@ -43,6 +43,8 @@ dependencies:
   flutter_password_strength: ^0.1.6
   provider: ^6.1.2
   mailer: ^6.3.0
+  firebase_database: ^11.2.0
+  vibration: ^2.0.1
 
 
 dev_dependencies:

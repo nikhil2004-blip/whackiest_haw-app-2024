@@ -91,13 +91,17 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+  // Check if the message is a whisper
+  bool _isWhisper(String message) {
+    return message.startsWith('/whisper');
+  }
+
   // Build the chat UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Chat Room'),
-
       ),
       body: Column(
         children: [
@@ -127,6 +131,20 @@ class _ChatPageState extends State<ChatPage> {
                     final sender = messages[index]['sender'];
                     final isSentByCurrentUser = sender == _username;
 
+                    // Check if the message is a whisper
+                    final isWhisper = _isWhisper(message);
+                    String displayMessage = message;
+                    String whisperTo = '';
+
+                    if (isWhisper) {
+                      // Extract the nickname and message part after ?whisper
+                      final parts = message.split(' ');
+                      if (parts.length > 1) {
+                        whisperTo = parts[1]; // Nickname of the target
+                        displayMessage = message.substring(parts[0].length + parts[1].length + 1);
+                      }
+                    }
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0), // Padding added here
                       child: Row(
@@ -143,6 +161,15 @@ class _ChatPageState extends State<ChatPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                if (isWhisper)
+                                  Text(
+                                    'Whispered to $whisperTo',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.orange, // Change color for whispered message
+                                    ),
+                                  ),
+                                SizedBox(height: 4),
                                 Text(
                                   sender, // Display the nickname
                                   style: TextStyle(
@@ -152,7 +179,7 @@ class _ChatPageState extends State<ChatPage> {
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  message,
+                                  displayMessage,
                                   style: TextStyle(
                                     color: isSentByCurrentUser ? Colors.white : Colors.black,
                                   ),
@@ -164,7 +191,6 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                     );
                   },
-
                 );
               },
             ),

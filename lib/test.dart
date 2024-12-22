@@ -48,30 +48,30 @@ class _GuardMapState extends State<GuardMap> {
   @override
   void initState() {
     super.initState();
-    //_lockOrientation();
+    _lockOrientation();
     _loadZoneData();
     _setupRealTimeUpdates();
   }
 
   @override
   void dispose() {
-    //_unlockOrientation();
+    _unlockOrientation();
     super.dispose();
   }
 
-  // Future<void> _lockOrientation() async {
-  //   await SystemChrome.setPreferredOrientations([
-  //     DeviceOrientation.landscapeRight,
-  //     DeviceOrientation.landscapeLeft,
-  //   ]);
-  // }
+  Future<void> _lockOrientation() async {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
+  }
 
-  // Future<void> _unlockOrientation() async {
-  //   await SystemChrome.setPreferredOrientations([
-  //     DeviceOrientation.portraitUp,
-  //     DeviceOrientation.portraitDown,
-  //   ]);
-  // }
+  Future<void> _unlockOrientation() async {
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
 
   Future<void> _loadZoneData() async {
     try {
@@ -110,7 +110,7 @@ class _GuardMapState extends State<GuardMap> {
       backgroundColor: Colors.white,
       body: LayoutBuilder(
         builder: (context, constraints) {
-          const double imageAspectRatio = 2390 / 3816;
+          const double imageAspectRatio = 2390 / 1120;
           final double containerWidth = constraints.maxWidth;
           final double containerHeight = constraints.maxHeight;
           double imageWidth, imageHeight;
@@ -158,7 +158,7 @@ class _GuardMapState extends State<GuardMap> {
                       _updateZoneState(zone.id, newState);
 
                       if (newState) {
-                        Timer(Duration(seconds: 5), () {
+                        Timer(Duration(seconds: 90), () {
                           setState(() {
                             maskedZones[zone.id] = false;
                             guardLabels.remove(zone.id);
