@@ -106,6 +106,7 @@ class _SignUpPageState extends State<SignUpPage> {
           'branch': selectedBranch,
           'username': uniqueUsername,
           'joinedOn': Timestamp.now(),
+          'balances': {}, // Initialize an empty balances map
         });
       }
 
@@ -117,6 +118,7 @@ class _SignUpPageState extends State<SignUpPage> {
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
