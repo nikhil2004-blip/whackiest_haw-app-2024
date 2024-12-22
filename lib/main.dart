@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Hostel App',
       theme: ThemeData(primarySwatch: Colors.blue),
+      debugShowCheckedModeBanner: false,
       initialRoute: '/', // Start route based on login state
       routes: {
         '/': (context) => AuthenticationWrapper(), // Start by checking login state

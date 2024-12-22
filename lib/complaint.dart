@@ -11,6 +11,7 @@ class ComplaintBoxApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Complaint Box',
+
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
