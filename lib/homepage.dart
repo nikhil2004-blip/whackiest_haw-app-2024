@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             children: [
               if (isAssembling)
                 Card(
-                  color: Colors.red, // Red card for emergency
+                  color: Colors.red.shade800, // Red card for emergency
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                           child: Text('Close'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
-                            foregroundColor: Colors.red,
+                            foregroundColor: Colors.red.shade800,
                           ),
                         ),
                       ],
