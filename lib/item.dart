@@ -216,6 +216,9 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   return null;
                 },
               ),
+              SizedBox(
+                height: 10,
+              ),
               DropdownButtonFormField<String>(
                 value: _selectedOwner,
                 hint: Text('Select Owner'),
