@@ -49,8 +49,6 @@ class _ItemListScreenState extends State<ItemListScreen> {
       appBar: AppBar(
         title: Text('Item Lending'),
       ),
-
-
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection('items').snapshots(),
         builder: (context, snapshot) {
@@ -85,11 +83,24 @@ class _ItemListScreenState extends State<ItemListScreen> {
                     ),
                   ),
                 ),
-                child: ListTile(
-                  title: Text(item['name'] ?? 'Unnamed Item'),
-                  subtitle: Text(
-                    'Status: ${item['status'] ?? 'Unknown'}, Owner: ${item['owner'] ?? 'Unknown'}, '
-                        '${item['status'] == 'Borrowed' ? 'Borrower: ${item['borrower'] ?? 'None'}, Room: ${item['room'] ?? 'N/A'}' : ''}',
+                child: Card(
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(16),
+                    title: Text(
+                      item['name'] ?? 'Unnamed Item',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                      'Status: ${item['status'] ?? 'Unknown'}, Owner: ${item['owner'] ?? 'Unknown'}, '
+                          '${item['status'] == 'Borrowed' ? 'Borrower: ${item['borrower'] ?? 'None'}, Room: ${item['room'] ?? 'N/A'}' : ''}',
+                      style: TextStyle(color: Colors.grey[700]),
+                    ),
+                    isThreeLine: true,
                   ),
                 ),
               );
@@ -109,6 +120,7 @@ class _ItemListScreenState extends State<ItemListScreen> {
     );
   }
 }
+
 
 class AddItemScreen extends StatefulWidget {
   final Future<void> Function(Map<String, dynamic>) onAddItem;
@@ -275,10 +287,11 @@ class _UpdateItemScreenState extends State<UpdateItemScreen> {
       });
     } else {
       setState(() {
-        _room = 'N/A';
+        _room = 'N/A';  // In case borrower is not found
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -287,7 +300,6 @@ class _UpdateItemScreenState extends State<UpdateItemScreen> {
         title: Text('Update Item'),
         leading: BackButton(onPressed: () => Navigator.pop(context)),
       ),
-
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -295,34 +307,45 @@ class _UpdateItemScreenState extends State<UpdateItemScreen> {
           child: Column(
             children: [
               if (widget.item['status'] == 'Available') ...[
-                DropdownButtonFormField<String>(
-                  value: _selectedBorrower,
-                  hint: Text('Select Borrower'),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedBorrower = value;
-                    });
-                    if (value != null && value != _currentUserNickname) {
-                      _fetchRoomForBorrower(value);
-                    }
-                  },
-                  items: _users.map((user) {
-                    return DropdownMenuItem<String>(
-                      value: user,
-                      child: Text(user),
-                    );
-                  }).toList(),
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please select a borrower';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Room: $_room',
-                  style: TextStyle(fontSize: 16),
+                Card(
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(vertical: 8),
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        DropdownButtonFormField<String>(
+                          value: _selectedBorrower,
+                          hint: Text('Select Borrower'),
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedBorrower = value;
+                            });
+                            if (value != null && value != _currentUserNickname) {
+                              _fetchRoomForBorrower(value);
+                            }
+                          },
+                          items: _users.map((user) {
+                            return DropdownMenuItem<String>(
+                              value: user,
+                              child: Text(user),
+                            );
+                          }).toList(),
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Please select a borrower';
+                            }
+                            return null;
+                          },
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'Room: $_room',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
               SizedBox(height: 20),

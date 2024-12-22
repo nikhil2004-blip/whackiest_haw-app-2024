@@ -5,7 +5,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-
 class ChatPage extends StatefulWidget {
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -20,6 +19,7 @@ class _ChatPageState extends State<ChatPage> {
 
   late String _userId;
   late String _username;
+  final ScrollController _scrollController = ScrollController(); // Scroll controller
 
   @override
   void initState() {
@@ -27,6 +27,7 @@ class _ChatPageState extends State<ChatPage> {
     _initFCM();
     _userId = _auth.currentUser?.uid ?? ''; // Get user ID
     _username = _auth.currentUser?.email ?? 'Guest'; // Set a default username (email)
+    _loadNickname(); // Fetch nickname
   }
 
   // Initialize Firebase Cloud Messaging
@@ -64,12 +65,26 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
+  // Fetch nickname from Firestore
+  Future<void> _loadNickname() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      // Fetch the nickname from Firestore 'users' collection
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+      if (userDoc.exists) {
+        setState(() {
+          _username = userDoc['nickname'] ?? 'Guest'; // Update to nickname if available
+        });
+      }
+    }
+  }
+
   // Send a message to Firestore
   void _sendMessage() async {
     if (_controller.text.isNotEmpty) {
       await _firestore.collection('chat').add({
         'message': _controller.text,
-        'sender': _username,
+        'sender': _username, // Use nickname as sender
         'timestamp': FieldValue.serverTimestamp(),
       });
       _controller.clear();
@@ -82,15 +97,7 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Chat Room'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.exit_to_app),
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.pushReplacementNamed(context, '/login');
-            },
-          ),
-        ],
+
       ),
       body: Column(
         children: [
@@ -107,16 +114,57 @@ class _ChatPageState extends State<ChatPage> {
                 }
 
                 final messages = snapshot.data?.docs ?? [];
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  // Ensure the list is scrolled to the bottom when new data is loaded
+                  _scrollToBottom();
+                });
+
                 return ListView.builder(
+                  controller: _scrollController, // Attach the controller here
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[index]['message'];
                     final sender = messages[index]['sender'];
-                    return ListTile(
-                      title: Text(sender),
-                      subtitle: Text(message),
+                    final isSentByCurrentUser = sender == _username;
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0), // Padding added here
+                      child: Row(
+                        mainAxisAlignment: isSentByCurrentUser
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12.0),
+                            decoration: BoxDecoration(
+                              color: isSentByCurrentUser ? Colors.blue : Colors.grey[300],
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  sender, // Display the nickname
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: isSentByCurrentUser ? Colors.white : Colors.black,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  message,
+                                  style: TextStyle(
+                                    color: isSentByCurrentUser ? Colors.white : Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   },
+
                 );
               },
             ),
@@ -140,6 +188,15 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ],
       ),
+    );
+  }
+
+  // Scroll to the bottom of the list
+  void _scrollToBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(milliseconds: 100),
+      curve: Curves.easeOut,
     );
   }
 }

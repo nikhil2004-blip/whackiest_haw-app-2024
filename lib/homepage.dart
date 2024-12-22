@@ -77,16 +77,24 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                FloatingActionButton(
-                  onPressed: () {
-                    //Navigator.pushNamed(context, '/guardTracking');
-                  },
-                  child: Icon(Icons.handyman_outlined),
-                  backgroundColor: Colors.orangeAccent,
-                  tooltip: '',
+                SizedBox(
+                  width: 80, // Adjust width
+                  height: 80, // Adjust height
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      //Navigator.pushNamed(context, '/guardTracking');
+                    },
+                    child: Icon(
+                      Icons.campaign,
+                      size: 40, // Adjust the icon size
+                    ),
+                    backgroundColor: Colors.orangeAccent,
+                    tooltip: 'Assemble Now',
+                  ),
                 ),
               ],
             ),
+
           ],
         ),
       ),

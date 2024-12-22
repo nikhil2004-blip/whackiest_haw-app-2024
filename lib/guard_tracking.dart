@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/services.dart'; // Import for orientation lock
 import 'dart:async';
 
 class GuardMap extends StatefulWidget {
@@ -32,29 +31,8 @@ class _GuardMapState extends State<GuardMap> {
   @override
   void initState() {
     super.initState();
-    _lockOrientation();
     _loadZoneData();
     _setupRealTimeUpdates();
-  }
-
-  @override
-  void dispose() {
-    _unlockOrientation();
-    super.dispose();
-  }
-
-  Future<void> _lockOrientation() async {
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-    ]);
-  }
-
-  Future<void> _unlockOrientation() async {
-    await SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
   }
 
   Future<void> _loadZoneData() async {
