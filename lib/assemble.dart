@@ -173,42 +173,140 @@ class _AssemblePageState extends State<AssemblePage> with WidgetsBindingObserver
             ),
             if (isAssembling) ...[
               SizedBox(height: 20),
-              Card(
-                color: Color(0xFF2D3250), // Dark Blue for emergency card
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Emergency! Assembly Needed:',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        note,
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: _closeEmergency, // Close the emergency message and stop vibration
-                        child: Text('Close', style: TextStyle(color: Colors.white)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFF8B178),  // Valid gold color
-                          foregroundColor: Colors.white, // White text
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+              Center(
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Background - Holographic glass effect with glowing outline
+                    Container(
+                      width: double.infinity,
+                      height: 250,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blueAccent.withOpacity(0.6),
+                            blurRadius: 30,
+                            spreadRadius: 20,
+                            offset: Offset(0, 0),
                           ),
-                        ),
+                          BoxShadow(
+                            color: Colors.pinkAccent.withOpacity(0.3),
+                            blurRadius: 15,
+                            spreadRadius: 5,
+                            offset: Offset(5, 5),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    // Main alert card with 3D glassy effect
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.all(30),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(25),
+                        border: Border.all(
+                          width: 2,
+                          color: Colors.blueAccent.withOpacity(0.5),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blue.withOpacity(0.7),
+                            blurRadius: 25,
+                            spreadRadius: 15,
+                            offset: Offset(0, 15),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Title with Glowing Icon
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.warning_rounded,
+                                size: 35,
+                                color: Colors.purpleAccent,
+                              ),
+                              SizedBox(width: 15),
+                              Text(
+                                'Critical Assembly Alert!',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  letterSpacing: 2,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 10,
+                                      color: Colors.purpleAccent.withOpacity(0.6),
+                                      offset: Offset(2, 2),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+                          // Alert message with futuristic font style and animation
+                          AnimatedDefaultTextStyle(
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white.withOpacity(0.9),
+                              fontFamily: 'RobotoMono', // Monospace font for futuristic feel
+                              letterSpacing: 1.5,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 15,
+                                  color: Colors.greenAccent.withOpacity(0.8),
+                                  offset: Offset(0, 5),
+                                ),
+                              ],
+                            ),
+                            duration: Duration(seconds: 1),
+                            child: Text(
+                              note,
+                              textAlign: TextAlign.justify,
+                            ),
+                          ),
+                          SizedBox(height: 25),
+                          // Interactive close button with glowing effect
+                          Center(
+                            child: ElevatedButton.icon(
+                              onPressed: _closeEmergency,
+                              icon: Icon(
+                                Icons.power_settings_new_rounded,
+                                size: 30,
+                                color: Colors.white,
+                              ),
+                              label: Text(
+                                'Deactivate Alert',
+                                style: TextStyle(fontSize: 18, color: Colors.white),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                foregroundColor: Colors.white, backgroundColor: Colors.deepOrange,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                elevation: 15,
+                                shadowColor: Colors.deepOrange.withOpacity(0.6),
+                                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ]
+
+
           ],
         ),
       ),

@@ -188,7 +188,8 @@ class _CieChatScreenState extends State<CieChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        backgroundColor: Color(0xFF676F9D), // Soft purple-blue for app bar
+        backgroundColor: Color(0xFF676F9D),
+        iconTheme: IconThemeData(color: Colors.white),// Soft purple-blue for app bar
       ),
       body: Column(
         children: [

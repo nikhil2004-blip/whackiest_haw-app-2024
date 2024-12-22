@@ -127,9 +127,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Home',style: TextStyle(color: Colors.white)),
+          title: Text('Home', style: TextStyle(color: Colors.white)),
           backgroundColor: Color(0xFF676F9D), // #676f9d for AppBar background
+          iconTheme: IconThemeData(color: Colors.white), // Set AppDrawer icon color to white
         ),
+
         drawer: AppDrawer(currentUser: currentUser),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -201,10 +203,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   SizedBox(width: 10),
                   FloatingActionButton(
                     onPressed: _assemble,
-                    child: Icon(Icons.campaign),
-                    backgroundColor: Color(0xFFF9B17A), // Soft orange button
+                    child: Icon(
+                      Icons.campaign,
+                      size: 40, // Larger icon for better visibility
+                      color: Colors.black, // Icon color for better contrast
+                    ),
+                    backgroundColor: Color(0xFFF9A05C), // Brighter and more vibrant orange
                     tooltip: 'Assemble Now',
+                    elevation: 10, // Stronger shadow for a floating effect
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15), // Slightly rounded edges
+                    ),
+                    splashColor: Colors.deepOrange.withOpacity(0.4), // Splash effect on tap
                   ),
+
                 ],
               ),
             ],

@@ -24,6 +24,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final List<String> years = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
   final List<String> branches = [
     'Civil Engineering',
+    'CSE AIML',
+    'CSE CYBER',
     'Computer Science and Engineering',
     'Electrical and Electronics Eng',
     'Electronics and Instrumentation Eng',

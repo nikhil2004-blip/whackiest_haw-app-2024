@@ -158,12 +158,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 labelText: 'Room Number',
                 icon: Icons.home,
               ),
-              _buildTextField(
-                controller: _ageController,
-                labelText: 'Age',
-                icon: Icons.cake,
-                keyboardType: TextInputType.number,
-              ),
+
               _buildDatePickerField(),
               _buildDropdownField(
                 label: 'Sex',
@@ -175,6 +170,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   });
                 },
                 icon: Icons.person_outline, // Icon for sex dropdown
+              ),
+              _buildTextField(
+                controller: _ageController,
+                labelText: 'Age',
+                icon: Icons.cake,
+                keyboardType: TextInputType.number,
               ),
               _buildDropdownField(
                 label: 'Year',

@@ -90,8 +90,9 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF2D3250), // Dark Blue (AppBar background)
+        backgroundColor: Color(0xFF676F9D), // Dark Blue (AppBar background)
         title: Text('Money Ledger',style: TextStyle(color: Colors.white)),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -101,7 +102,7 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
               controller: _descriptionController,
               decoration: InputDecoration(
                 labelText: 'Expense Description',
-                labelStyle: TextStyle(color: Color(0xFF424769)), // Darker Blue for text labels
+                labelStyle: TextStyle(color: Color(0xFF676F9D)), // Darker Blue for text labels
                 filled: true,
                 fillColor: Colors.white, // White background for the text field
                 focusedBorder: OutlineInputBorder(
@@ -116,7 +117,7 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Amount',
-                labelStyle: TextStyle(color: Color(0xFF424769)),
+                labelStyle: TextStyle(color: Color(0xFF676F9D)),
                 filled: true,
                 fillColor: Colors.white,
                 focusedBorder: OutlineInputBorder(
@@ -140,7 +141,7 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
                   value: member['id'],
                   child: Text(
                     member['nickname'], // Show nickname here
-                    style: TextStyle(color: Color(0xFF2D3250)), // Dark Blue for text
+                    style: TextStyle(color: Color(0xFF676F9D)), // Dark Blue for text
                   ),
                 );
               }).toList(),
@@ -201,11 +202,14 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
                       String userId = balances.keys.elementAt(index);
                       double amount = balances[userId]?.toDouble() ?? 0.0;
 
-                      // Find the nickname for the userId from the members list
-                      String? userNickname = members.firstWhere((member) => member['id'] == userId)['nickname'];
+                      // Safely find the nickname
+                      String? userNickname = members.firstWhere(
+                            (member) => member['id'] == userId,
+                        orElse: () => {'nickname': 'Unknown'},
+                      )['nickname'];
 
                       return Card(
-                        color: Color(0xFF2D3250), // Dark Blue for card background
+                        color: Color(0xFF676F9D), // Dark Blue for card background
                         elevation: 5,
                         margin: EdgeInsets.symmetric(vertical: 10),
                         child: ListTile(
@@ -215,12 +219,13 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
                           ),
                           subtitle: Text(
                             'Balance: ₹${amount.toStringAsFixed(2)}',
-                            style: TextStyle(color: Colors.white70), // Lighter white for balance text
+                            style: TextStyle(color: Colors.white), // Lighter white for balance text
                           ),
                         ),
                       );
                     },
                   );
+
                 },
               ),
             ),
