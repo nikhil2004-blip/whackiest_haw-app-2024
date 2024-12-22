@@ -127,7 +127,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Home'),
+          title: Text('Home',style: TextStyle(color: Colors.white)),
+          backgroundColor: Color(0xFF676F9D), // #676f9d for AppBar background
         ),
         drawer: AppDrawer(currentUser: currentUser),
         body: Padding(
@@ -137,7 +138,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             children: [
               if (isAssembling)
                 Card(
-                  color: Colors.red,
+                  color: Colors.red, // Red card for emergency
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -156,7 +157,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                         ElevatedButton(
                           onPressed: _closeEmergency,
                           child: Text('Close'),
-                          style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.red),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.red,
+                          ),
                         ),
                       ],
                     ),
@@ -185,14 +189,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     child: TextField(
                       controller: _noteController,
                       focusNode: _focusNode, // Linked FocusNode
-                      decoration: InputDecoration(hintText: 'Enter assembly note'),
+                      decoration: InputDecoration(
+                        hintText: 'Enter assembly note',
+                        filled: true,
+                        fillColor: Color(0xFFF0F0F0), // Light gray background for text input
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
                   SizedBox(width: 10),
                   FloatingActionButton(
                     onPressed: _assemble,
                     child: Icon(Icons.campaign),
-                    backgroundColor: Colors.orangeAccent,
+                    backgroundColor: Color(0xFFF9B17A), // Soft orange button
                     tooltip: 'Assemble Now',
                   ),
                 ],
@@ -214,16 +223,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        color: Color(0xFF676F9D), // Tile color
         child: Container(
           padding: EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 40, color: Colors.blue),
+              Icon(icon, size: 40, color: Colors.white),
               SizedBox(height: 10),
               Text(
                 title,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                 textAlign: TextAlign.center,
               ),
             ],

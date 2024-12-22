@@ -67,7 +67,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Change Password')),
+      appBar: AppBar(
+        title: Text('Change Password', style: TextStyle(color: Colors.white)), // AppBar title color
+        backgroundColor: Color(0xFF2D3250), // Darker blue color for AppBar
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white), // White back icon
+          onPressed: () {
+            Navigator.pop(context); // Navigate back to the previous screen
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -75,9 +84,19 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Current Password TextField
               TextFormField(
                 obscureText: true,
-                decoration: InputDecoration(labelText: 'Current Password'),
+                decoration: InputDecoration(
+                  labelText: 'Current Password',
+                  labelStyle: TextStyle(color: Color(0xFF676F9D)), // Light blue-grey color for labels
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                ),
                 onChanged: (value) => currentPassword = value,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -86,9 +105,21 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   return null;
                 },
               ),
+              SizedBox(height: 16),
+
+              // New Password TextField
               TextFormField(
                 obscureText: true,
-                decoration: InputDecoration(labelText: 'New Password'),
+                decoration: InputDecoration(
+                  labelText: 'New Password',
+                  labelStyle: TextStyle(color: Color(0xFF676F9D)), // Light blue-grey color for labels
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                ),
                 onChanged: (value) => newPassword = value,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -100,9 +131,21 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   return null;
                 },
               ),
+              SizedBox(height: 16),
+
+              // Confirm Password TextField
               TextFormField(
                 obscureText: true,
-                decoration: InputDecoration(labelText: 'Confirm Password'),
+                decoration: InputDecoration(
+                  labelText: 'Confirm Password',
+                  labelStyle: TextStyle(color: Color(0xFF676F9D)), // Light blue-grey color for labels
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                ),
                 onChanged: (value) => confirmPassword = value,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -115,6 +158,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 },
               ),
               SizedBox(height: 20),
+
+              // Update Password Button
               _isLoading
                   ? Center(child: CircularProgressIndicator())
                   : ElevatedButton(
@@ -125,7 +170,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     _changePassword();
                   }
                 },
-                child: Text('Update Password'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFf8b17a), // Golden Yellow for the button
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text('Update Password', style: TextStyle(color: Colors.white)),
               ),
             ],
           ),

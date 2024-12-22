@@ -125,8 +125,9 @@ class _SignUpPageState extends State<SignUpPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign Up'),
+        title: Text('Sign Up', style: TextStyle(color: Colors.white)),
         centerTitle: true,
+        backgroundColor: Color(0xFF2D3250), // Darker Blue for AppBar
       ),
       body: SingleChildScrollView( // Make the whole page scrollable
         child: Padding(
@@ -218,6 +219,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  backgroundColor: Color(0xFFF8B17A), // Golden Yellow for button
                 ),
               ),
             ],
@@ -242,7 +244,7 @@ class _SignUpPageState extends State<SignUpPage> {
         keyboardType: keyboardType,
         decoration: InputDecoration(
           labelText: labelText,
-          prefixIcon: icon != null ? Icon(icon) : null,
+          prefixIcon: icon != null ? Icon(icon, color: Color(0xFF676F9D)) : null, // Light Blue-Grey icon color
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -277,7 +279,7 @@ class _SignUpPageState extends State<SignUpPage> {
             controller: _dobController,
             decoration: InputDecoration(
               labelText: 'Date of Birth',
-              prefixIcon: Icon(Icons.calendar_today),
+              prefixIcon: Icon(Icons.calendar_today, color: Color(0xFF676F9D)), // Light Blue-Grey icon color
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -305,7 +307,7 @@ class _SignUpPageState extends State<SignUpPage> {
         onChanged: onChanged,
         decoration: InputDecoration(
           labelText: label,
-          prefixIcon: Icon(icon),
+          prefixIcon: Icon(icon, color: Color(0xFF676F9D)), // Light Blue-Grey icon color
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),

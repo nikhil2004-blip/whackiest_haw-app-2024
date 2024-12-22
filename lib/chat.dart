@@ -101,7 +101,8 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat Room'),
+        title: Text('Chat Room',style: TextStyle(color: Colors.white)),
+        backgroundColor: Color(0xFF676F9D), // Soft purple-blue for app bar
       ),
       body: Column(
         children: [
@@ -137,7 +138,7 @@ class _ChatPageState extends State<ChatPage> {
                     String whisperTo = '';
 
                     if (isWhisper) {
-                      // Extract the nickname and message part after ?whisper
+                      // Extract the nickname and message part after /whisper
                       final parts = message.split(' ');
                       if (parts.length > 1) {
                         whisperTo = parts[1]; // Nickname of the target
@@ -155,7 +156,7 @@ class _ChatPageState extends State<ChatPage> {
                           Container(
                             padding: const EdgeInsets.all(12.0),
                             decoration: BoxDecoration(
-                              color: isSentByCurrentUser ? Colors.blue : Colors.grey[300],
+                              color: isSentByCurrentUser ? Color(0xFF676F9D) : Color(0xFF2D3250), // Soft purple-blue for sent, darker gray-blue for received messages
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             child: Column(
@@ -166,7 +167,7 @@ class _ChatPageState extends State<ChatPage> {
                                     'Whispered to $whisperTo',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.orange, // Change color for whispered message
+                                      color: Color(0xFFF9B17A), // Soft orange for whispers
                                     ),
                                   ),
                                 SizedBox(height: 4),
@@ -174,14 +175,14 @@ class _ChatPageState extends State<ChatPage> {
                                   sender, // Display the nickname
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: isSentByCurrentUser ? Colors.white : Colors.black,
+                                    color: Color(0xFFF9B17A), // Username in soft orange
                                   ),
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  displayMessage,
+                                  displayMessage, // Message in white color
                                   style: TextStyle(
-                                    color: isSentByCurrentUser ? Colors.white : Colors.black,
+                                    color: Colors.white, // Change message text to white
                                   ),
                                 ),
                               ],
@@ -202,11 +203,24 @@ class _ChatPageState extends State<ChatPage> {
                 Expanded(
                   child: TextField(
                     controller: _controller,
-                    decoration: InputDecoration(hintText: 'Enter your message'),
+                    decoration: InputDecoration(
+                      hintText: 'Enter your message',
+                      filled: true,
+                      fillColor: Color(0xFFffffff), // White background for text field
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFF676F9D)), // Soft purple-blue border
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFF424769)), // Dark gray-blue border on focus
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
                   ),
                 ),
                 IconButton(
                   icon: Icon(Icons.send),
+                  color: Color(0xFF676F9D), // Soft purple-blue for send button
                   onPressed: _sendMessage,
                 ),
               ],

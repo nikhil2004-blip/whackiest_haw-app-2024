@@ -8,11 +8,10 @@ class AssemblePage extends StatefulWidget {
   _AssemblePageState createState() => _AssemblePageState();
 }
 
-class _AssemblePageState extends State<AssemblePage> with WidgetsBindingObserver{
+class _AssemblePageState extends State<AssemblePage> with WidgetsBindingObserver {
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
   final TextEditingController _noteController = TextEditingController();
-
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -25,7 +24,6 @@ class _AssemblePageState extends State<AssemblePage> with WidgetsBindingObserver
     _initializeNotifications();
     _listenForAssembleMessages();
   }
-
 
   // Initialize local notifications
   Future<void> _initializeNotifications() async {
@@ -74,7 +72,6 @@ class _AssemblePageState extends State<AssemblePage> with WidgetsBindingObserver
   Future<void> _assemble() async {
     String note = _noteController.text;
 
-
     // Update Firestore to trigger the message on all devices
     await _firestore.collection('assemble').doc('message').set({
       'note': note,
@@ -88,7 +85,6 @@ class _AssemblePageState extends State<AssemblePage> with WidgetsBindingObserver
     // Exit this page and navigate to the homepage
     Navigator.pop(context);
   }
-
 
   // Listen for changes in Firestore
   void _listenForAssembleMessages() {
@@ -135,43 +131,78 @@ class _AssemblePageState extends State<AssemblePage> with WidgetsBindingObserver
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Assemble Page')),
+      appBar: AppBar(
+        backgroundColor: Color(0xFF676F9D), // Soft Blue for the AppBar
+        title: Text('Assemble Page'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Assemble Now', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            Text('Assemble Now',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF424769))),
             SizedBox(height: 20),
-            Text('Enter the assembly note for all members:', style: TextStyle(fontSize: 18)),
+            Text(
+              'Enter the assembly note for all members:',
+              style: TextStyle(fontSize: 18, color: Color(0xFF424769)),
+            ),
             TextField(
-
               controller: _noteController, // Link TextField with controller
-
-              decoration: InputDecoration(hintText: 'Enter note here'),
-
+              decoration: InputDecoration(
+                hintText: 'Enter note here',
+                filled: true,
+                fillColor: Color(0xFFF1F1F1), // Light Gray background for the TextField
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF676F9D)),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _assemble, // Trigger vibration and notification
               child: Text('Assemble'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFF8B178),  // Valid gold color
+                foregroundColor: Colors.white, // White text color on the button
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
             ),
             if (isAssembling) ...[
               SizedBox(height: 20),
               Card(
-                color: Colors.red,
+                color: Color(0xFF2D3250), // Dark Blue for emergency card
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Emergency! Assembly Needed:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
+                      Text(
+                        'Emergency! Assembly Needed:',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
                       SizedBox(height: 10),
-                      Text(note, style: TextStyle(fontSize: 18, color: Colors.white)),
+                      Text(
+                        note,
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
                       SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: _closeEmergency, // Close the emergency message and stop vibration
                         child: Text('Close', style: TextStyle(color: Colors.white)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFF8B178),  // Valid gold color
+                          foregroundColor: Colors.white, // White text
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                       ),
                     ],
                   ),

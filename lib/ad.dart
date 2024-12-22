@@ -23,7 +23,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: FutureBuilder<String?>(
+      child: FutureBuilder<String?>(  // Fetch user nickname
         future: _fetchNickname(),
         builder: (context, snapshot) {
           String nickname = snapshot.data ?? "Loading...";
@@ -32,10 +32,14 @@ class AppDrawer extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: [
               UserAccountsDrawerHeader(
-                decoration: BoxDecoration(color: Colors.blueAccent),
+                decoration: BoxDecoration(color: Color(0xFF676F9D)), // Soft Blue Background
                 accountName: Text(
                   nickname,
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 accountEmail: Text(
                   currentUser?.email ?? "No email available",
@@ -45,44 +49,54 @@ class AppDrawer extends StatelessWidget {
                   backgroundColor: Colors.white,
                   child: Text(
                     nickname.isNotEmpty ? nickname[0].toUpperCase() : "G",
-                    style: TextStyle(fontSize: 40.0, color: Colors.blueAccent),
+                    style: TextStyle(
+                      fontSize: 40.0,
+                      color: Color(0xFF2D3250), // Dark Blue for initials
+                    ),
                   ),
                 ),
               ),
-
               ListTile(
-                leading: Icon(Icons.person),
-                title: Text('Profile'),
+                leading: Icon(Icons.person, color: Color(0xFF2D3250)), // Dark Blue for Icons
+                title: Text(
+                  'Profile',
+                  style: TextStyle(color: Color(0xFF424769)), // Dark Gray for Text
+                ),
                 onTap: () {
                   Navigator.pushNamed(context, '/profile');
                 },
-
               ),
               ListTile(
-                leading: Icon(Icons.group),
-                title: Text('Members'),
+                leading: Icon(Icons.group, color: Color(0xFF2D3250)), // Dark Blue for Icons
+                title: Text(
+                  'Members',
+                  style: TextStyle(color: Color(0xFF424769)), // Dark Gray for Text
+                ),
                 onTap: () {
                   Navigator.pushNamed(context, '/members');
                 },
-
               ),
+              // ListTile(
+              //   leading: Icon(Icons.settings, color: Color(0xFF2D3250)), // Dark Blue for Icons
+              //   title: Text(
+              //     'Settings',
+              //     style: TextStyle(color: Color(0xFF424769)), // Dark Gray for Text
+              //   ),
+              //   onTap: () {
+              //     Navigator.pushNamed(context, '/settings');
+              //   },
+              // ),
               ListTile(
-                leading: Icon(Icons.settings),
-                title: Text('Settings'),
-                onTap: () {
-                  Navigator.pushNamed(context, '/settings'); // Use push instead of pushReplacementNamed
-                },
-
-              ),
-              ListTile(
-                leading: Icon(Icons.logout),
-                title: Text('Log Out'),
+                leading: Icon(Icons.logout, color: Color(0xFF2D3250)), // Dark Blue for Icons
+                title: Text(
+                  'Log Out',
+                  style: TextStyle(color: Color(0xFF424769)), // Dark Gray for Text
+                ),
                 onTap: () async {
                   await FirebaseAuth.instance.signOut();
                   Navigator.pushReplacementNamed(context, '/');
                 },
               ),
-
             ],
           );
         },

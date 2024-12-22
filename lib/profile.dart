@@ -77,20 +77,21 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text('Profile',style: TextStyle(color: Colors.white)),
+        backgroundColor: Color(0xFF424769), // Dark blue-grey for app bar
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.edit),
+            icon: Icon(Icons.edit, color: Colors.white),
             onPressed: _navigateToEditProfile,
           ),
           IconButton(
-            icon: Icon(Icons.lock),
+            icon: Icon(Icons.lock, color: Colors.white),
             onPressed: () {
               Navigator.push(
                 context,
@@ -109,7 +110,9 @@ class _ProfilePageState extends State<ProfilePage> {
           : _userData == null
           ? Center(
         child: Text(
-            'No profile data found. Please complete your profile.'),
+            'No profile data found. Please complete your profile.',
+            style: TextStyle(
+                fontSize: 16, color: Color(0xFF424769))),
       )
           : Padding(
         padding: const EdgeInsets.all(16.0),
@@ -122,13 +125,16 @@ class _ProfilePageState extends State<ProfilePage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
+              color: Colors.white, // White card background
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildProfileField('Nickname', _userData!['nickname']),
-                    _buildProfileField('Room Number', _userData!['room_number']),
+                    _buildProfileField(
+                        'Nickname', _userData!['nickname']),
+                    _buildProfileField(
+                        'Room Number', _userData!['room_number']),
                     _buildProfileField('Age', _userData!['age']),
                     _buildProfileField('Sex', _userData!['sex']),
                     _buildProfileField('Year', _userData!['year']),
@@ -157,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w500,
-          color: Colors.black87,
+          color: Color(0xFF424769), // Dark blue-grey text
         ),
       ),
     );
@@ -188,7 +194,7 @@ class _ProfilePageState extends State<ProfilePage> {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: Colors.black87,
+              color: Color(0xFF424769), // Dark blue-grey text
             ),
           ),
         ],

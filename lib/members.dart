@@ -47,11 +47,11 @@ class _MembersPageState extends State<MembersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('All Members'),
+        title: Text('All Members',style: TextStyle(color: Colors.white)),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.blue, Colors.purple],
+              colors: [Color(0xFF676F9D), Color(0xFF424769)],  // Gradient with shades of blue/grey
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -77,13 +77,14 @@ class _MembersPageState extends State<MembersPage> {
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: 'Search Members...',
-                  prefixIcon: Icon(Icons.search, color: Colors.blueAccent),
+                  hintStyle: TextStyle(color: Color(0xFF676F9D)),
+                  prefixIcon: Icon(Icons.search, color: Color(0xFF676F9D)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide.none,
                   ),
                   filled: true,
-                  fillColor: Colors.white,
+                  fillColor: Colors.white,  // White background for the search box
                 ),
                 onChanged: (query) {
                   _filterMembers(query);
@@ -110,9 +111,10 @@ class _MembersPageState extends State<MembersPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
+                    color: Color(0xFF2D3250),  // Dark blue card background
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: Colors.blueAccent,
+                        backgroundColor: Color(0xFF676F9D),  // Blue accent color for avatar
                         child: Icon(Icons.person, color: Colors.white),
                       ),
                       title: Text(
@@ -120,6 +122,7 @@ class _MembersPageState extends State<MembersPage> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
+                          color: Colors.white,  // White text for title
                         ),
                       ),
                       subtitle: Column(
@@ -128,11 +131,11 @@ class _MembersPageState extends State<MembersPage> {
                           SizedBox(height: 4),
                           Text(
                             'Nickname: $nickname',
-                            style: TextStyle(color: Colors.black54),
+                            style: TextStyle(color: Colors.white70),  // Light white color for subtitle
                           ),
                           Text(
                             'Room: $roomNumber',
-                            style: TextStyle(color: Colors.black54),
+                            style: TextStyle(color: Colors.white70),  // Light white color for subtitle
                           ),
                         ],
                       ),

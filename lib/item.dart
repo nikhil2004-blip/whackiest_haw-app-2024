@@ -13,6 +13,32 @@ class ItemLendingApp extends StatelessWidget {
       title: 'Item Lending App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Color(0xFFFFFFFF), // White background
+        appBarTheme: AppBarTheme(
+          backgroundColor: Color(0xFF676F9D), // AppBar with soft purple-blue
+        ),
+        textTheme: TextTheme(
+          titleLarge: TextStyle(color: Color(0xFF424769)), // Dark gray-blue for titles
+          bodyMedium: TextStyle(color: Color(0xFF2D3250)), // Darker gray for subtitles
+          bodyLarge: TextStyle(color: Color(0xFF424769)), // Body text in dark gray-blue
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(0xFFF9B17A), // Soft orange buttons
+            foregroundColor: Colors.white, // White text on buttons
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Color(0xFFF0F0F0), // Light gray for text field background
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xFF676F9D)), // Soft purple-blue border
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Color(0xFFF9B17A), // Soft orange for the FAB
+        ),
       ),
       home: ItemListScreen(),
     );
@@ -47,7 +73,7 @@ class _ItemListScreenState extends State<ItemListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Item Lending'),
+        title: Text('Item Ledger',style: TextStyle(color: Colors.white)),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection('items').snapshots(),
@@ -89,16 +115,22 @@ class _ItemListScreenState extends State<ItemListScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  color: Color(0xFF676F9D), // Tile background color
                   child: ListTile(
                     contentPadding: EdgeInsets.all(16),
                     title: Text(
                       item['name'] ?? 'Unnamed Item',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white, // White text on tile
+                      ),
                     ),
                     subtitle: Text(
                       'Status: ${item['status'] ?? 'Unknown'}, Owner: ${item['owner'] ?? 'Unknown'}, '
                           '${item['status'] == 'Borrowed' ? 'Borrower: ${item['borrower'] ?? 'None'}, Room: ${item['room'] ?? 'N/A'}' : ''}',
-                      style: TextStyle(color: Colors.grey[700]),
+                      style: TextStyle(
+                        color: Colors.white70, // Lighter text for subtitle
+                      ),
                     ),
                     isThreeLine: true,
                   ),
@@ -120,7 +152,6 @@ class _ItemListScreenState extends State<ItemListScreen> {
     );
   }
 }
-
 
 class AddItemScreen extends StatefulWidget {
   final Future<void> Function(Map<String, dynamic>) onAddItem;
@@ -161,7 +192,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -169,7 +199,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
         title: Text('Add New Item'),
         leading: BackButton(onPressed: () => Navigator.pop(context)),
       ),
-
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -252,7 +281,7 @@ class _UpdateItemScreenState extends State<UpdateItemScreen> {
   String? _selectedBorrower;
   List<String> _users = [];
   String? _currentUserNickname;
-  String _room = 'N/A'; // Default value
+  String _room = 'N/A';
 
   @override
   void initState() {
@@ -264,7 +293,6 @@ class _UpdateItemScreenState extends State<UpdateItemScreen> {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
       final usersCollection = FirebaseFirestore.instance.collection('users');
-
       final currentUserDoc = await usersCollection.doc(currentUser.uid).get();
       setState(() {
         _currentUserNickname = currentUserDoc['nickname'];
@@ -287,11 +315,10 @@ class _UpdateItemScreenState extends State<UpdateItemScreen> {
       });
     } else {
       setState(() {
-        _room = 'N/A';  // In case borrower is not found
+        _room = 'N/A'; // In case borrower is not found
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {

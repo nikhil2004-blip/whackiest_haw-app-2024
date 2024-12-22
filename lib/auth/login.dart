@@ -66,7 +66,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //
+      appBar: AppBar(
+        title: Text(
+          'Login',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color(0xFF2D3250), // Darker blue color for AppBar
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
@@ -80,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                     fontSize: 50,
                     fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple,
+                    color: Color(0xFF2D3250), // Darker blue for title
                   ),
                 ),
                 SizedBox(height: 30),
@@ -95,11 +101,12 @@ class _LoginPageState extends State<LoginPage> {
                       key: _formKey,
                       child: Column(
                         children: [
+                          // Email TextField
                           TextFormField(
                             controller: _emailController,
                             decoration: InputDecoration(
                               labelText: 'Email',
-                              prefixIcon: Icon(Icons.email),
+                              prefixIcon: Icon(Icons.email, color: Color(0xFF676F9D)), // Light blue-grey
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 15.0),
                             ),
@@ -115,17 +122,20 @@ class _LoginPageState extends State<LoginPage> {
                             },
                           ),
                           SizedBox(height: 16),
+
+                          // Password TextField
                           TextFormField(
                             controller: _passwordController,
-                            obscureText: _isPasswordObscured, // Use the state variable to toggle visibility
+                            obscureText: _isPasswordObscured,
                             decoration: InputDecoration(
                               labelText: 'Password',
-                              prefixIcon: Icon(Icons.lock),
+                              prefixIcon: Icon(Icons.lock, color: Color(0xFF676F9D)), // Light blue-grey
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _isPasswordObscured
                                       ? Icons.visibility_off
                                       : Icons.visibility,
+                                  color: Color(0xFF676F9D), // Light blue-grey
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -155,28 +165,33 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                           SizedBox(height: 20),
+
+                          // Login Button
                           _isLoading
                               ? Center(child: CircularProgressIndicator())
                               : ElevatedButton(
                             onPressed: _login,
                             style: ElevatedButton.styleFrom(
                               minimumSize: Size(double.infinity, 50),
-                              backgroundColor: Colors.deepPurpleAccent,
+                              backgroundColor: Color(0xFFF8B17A), // Golden Yellow for button
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
                             child: Text(
                               'Login',
-                              style: TextStyle(fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white70,),
-                          ),
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2D3250)),
+                            ),
                           ),
                           SizedBox(height: 10),
+
+                          // Sign-up Link
                           TextButton(
                             onPressed: () => Navigator.pushNamed(context, '/signup'),
-                            child: Text("Don't have an account? Sign Up", style: TextStyle(fontSize: 16)),
+                            child: Text(
+                              "Don't have an account? Sign Up",
+                              style: TextStyle(fontSize: 16, color: Color(0xFF676F9D)), // Light blue-grey for text
+                            ),
                           ),
                         ],
                       ),

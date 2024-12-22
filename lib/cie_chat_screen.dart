@@ -96,6 +96,7 @@ class _CieChatScreenState extends State<CieChatScreen> {
       elevation: 4,
       margin: EdgeInsets.all(12),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      color: Color(0xFFF0F0F0), // Light gray card for preview
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -103,15 +104,23 @@ class _CieChatScreenState extends State<CieChatScreen> {
           children: [
             Text(
               'Selected File',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Color(0xFF424769), // Dark gray for title
+              ),
             ),
             SizedBox(height: 8),
-            Text(_fileName ?? 'No file selected'),
+            Text(_fileName ?? 'No file selected', style: TextStyle(color: Color(0xFF424769))),
             SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
                 labelText: 'Add a description',
+                labelStyle: TextStyle(color: Color(0xFF424769)), // Label text color
                 border: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF676F9D)), // Border color on focus
+                ),
               ),
               onChanged: (value) {
                 setState(() {
@@ -126,6 +135,10 @@ class _CieChatScreenState extends State<CieChatScreen> {
                   ? CircularProgressIndicator(strokeWidth: 2, color: Colors.white)
                   : Icon(Icons.upload),
               label: Text('Upload File'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF676F9D), // Soft purple-blue button
+                foregroundColor: Colors.white,
+              ),
             ),
           ],
         ),
@@ -147,11 +160,18 @@ class _CieChatScreenState extends State<CieChatScreen> {
             return Card(
               margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               elevation: 2,
+              color: Color(0xFFF0F0F0), // Light gray for file card
               child: ListTile(
-                leading: Icon(Icons.attach_file),
-                title: Text(doc['fileName']),
-                subtitle: Text(doc['description']),
-                trailing: Icon(Icons.download, color: Theme.of(context).primaryColor),
+                leading: Icon(Icons.attach_file, color: Color(0xFF676F9D)), // Soft purple-blue icon
+                title: Text(
+                  doc['fileName'],
+                  style: TextStyle(color: Color(0xFF424769)), // Dark gray for text
+                ),
+                subtitle: Text(
+                  doc['description'],
+                  style: TextStyle(color: Color(0xFF424769)), // Dark gray for description
+                ),
+                trailing: Icon(Icons.download, color: Color(0xFF676F9D)), // Soft purple-blue for download icon
                 onTap: () {
                   // Open the file link
                 },
@@ -168,7 +188,7 @@ class _CieChatScreenState extends State<CieChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        backgroundColor: Colors.indigo,
+        backgroundColor: Color(0xFF676F9D), // Soft purple-blue for app bar
       ),
       body: Column(
         children: [
@@ -178,7 +198,7 @@ class _CieChatScreenState extends State<CieChatScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _pickFile,
-        backgroundColor: Colors.indigo,
+        backgroundColor: Color(0xFF676F9D), // Floating action button color
         child: Icon(Icons.add, color: Colors.white),
       ),
     );

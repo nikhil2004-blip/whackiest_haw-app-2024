@@ -87,11 +87,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Profile')),
+      appBar: AppBar(
+        title: Text('Edit Profile', style: TextStyle(color: Colors.white)),
+        centerTitle: true,
+        backgroundColor: Color(0xFF2D3250), // Darker Blue for AppBar
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -99,35 +102,35 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                TextFormField(
+                // Add padding to each form field to ensure spacing
+                _buildTextFormField(
                   initialValue: nickname,
-                  decoration: InputDecoration(labelText: 'Nickname'),
+                  label: 'Nickname',
                   onChanged: (value) => nickname = value,
                   validator: (value) => value == null || value.isEmpty ? 'Nickname is required' : null,
                 ),
-                TextFormField(
+                SizedBox(height: 16), // Space between fields
+                _buildTextFormField(
                   initialValue: roomNumber,
-                  decoration: InputDecoration(labelText: 'Room Number'),
+                  label: 'Room Number',
                   onChanged: (value) => roomNumber = value,
                   validator: (value) => value == null || value.isEmpty ? 'Room Number is required' : null,
                 ),
-                TextFormField(
+                SizedBox(height: 16), // Space between fields
+                _buildTextFormField(
                   initialValue: age,
-                  decoration: InputDecoration(labelText: 'Age'),
+                  label: 'Age',
                   keyboardType: TextInputType.number,
                   onChanged: (value) => age = value,
                   validator: (value) => value == null || value.isEmpty ? 'Age is required' : null,
                 ),
-                // Year Dropdown
-                DropdownButtonFormField<String>(
+                SizedBox(height: 16), // Space between fields
+
+                // Year Dropdown with padding
+                _buildDropdownField(
+                  label: 'Year',
                   value: year.isEmpty ? null : year,
-                  decoration: InputDecoration(labelText: 'Year'),
-                  items: years.map((yearOption) {
-                    return DropdownMenuItem<String>(
-                      value: yearOption,
-                      child: Text(yearOption),
-                    );
-                  }).toList(),
+                  items: years,
                   onChanged: (value) {
                     setState(() {
                       year = value!;
@@ -135,16 +138,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   },
                   validator: (value) => value == null || value.isEmpty ? 'Year is required' : null,
                 ),
-                // Branch Dropdown
-                DropdownButtonFormField<String>(
+                SizedBox(height: 16), // Space between fields
+
+                // Branch Dropdown with padding
+                _buildDropdownField(
+                  label: 'Branch',
                   value: branch.isEmpty ? null : branch,
-                  decoration: InputDecoration(labelText: 'Branch'),
-                  items: branches.map((branchOption) {
-                    return DropdownMenuItem<String>(
-                      value: branchOption,
-                      child: Text(branchOption),
-                    );
-                  }).toList(),
+                  items: branches,
                   onChanged: (value) {
                     setState(() {
                       branch = value!;
@@ -152,7 +152,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   },
                   validator: (value) => value == null || value.isEmpty ? 'Branch is required' : null,
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 20), // Space before the button
+
+                // Loading or Save button
                 _isLoading
                     ? CircularProgressIndicator()
                     : ElevatedButton(
@@ -162,12 +164,83 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     }
                   },
                   child: Text('Save'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFF8B17A), // Golden Yellow for button
+                    padding: EdgeInsets.symmetric(vertical: 12.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    textStyle: TextStyle(fontSize: 16, color: Color(0xFF424769)), // Dark Blue-Grey for text
+                  ),
                 ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  // Custom text field widget with consistent styling
+  Widget _buildTextFormField({
+    required String initialValue,
+    required String label,
+    TextInputType? keyboardType,
+    required ValueChanged<String> onChanged,
+    required FormFieldValidator<String> validator,
+  }) {
+    return TextFormField(
+      initialValue: initialValue,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Color(0xFF676F9D)), // Light Blue-Grey label color
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Color(0xFF676F9D), width: 2), // Light Blue-Grey border
+        ),
+      ),
+      keyboardType: keyboardType,
+      onChanged: onChanged,
+      validator: validator,
+    );
+  }
+
+  // Custom dropdown field with consistent styling
+  Widget _buildDropdownField({
+    required String label,
+    required String? value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+    required FormFieldValidator<String?> validator,
+  }) {
+    return DropdownButtonFormField<String>(
+      value: value,
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Color(0xFF676F9D)), // Light Blue-Grey label color
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(color: Color(0xFF676F9D), width: 2), // Light Blue-Grey border
+        ),
+      ),
+      items: items.map((String item) {
+        return DropdownMenuItem<String>(
+          value: item,
+          child: Text(item),
+        );
+      }).toList(),
+      validator: validator,
     );
   }
 }

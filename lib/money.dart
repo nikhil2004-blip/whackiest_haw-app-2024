@@ -51,24 +51,58 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Expense Tracker'),
+        title: Text('Money Ledger', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color(0xFF676F9D), // Soft purple-blue for app bar
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            // Description Text Field
             TextField(
               controller: _descriptionController,
-              decoration: InputDecoration(labelText: 'Expense Description'),
+              decoration: InputDecoration(
+                labelText: 'Expense Description',
+                labelStyle: TextStyle(color: Color(0xFF424769)), // Dark gray-blue for label
+                fillColor: Color(0xFFF0F0F0), // Light gray for the background
+                filled: true,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF676F9D)), // Soft purple-blue border
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF424769)), // Dark gray-blue border when focused
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
             ),
+            SizedBox(height: 16),
+
+            // Amount Text Field
             TextField(
               controller: _amountController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Amount'),
+              decoration: InputDecoration(
+                labelText: 'Amount',
+                labelStyle: TextStyle(color: Color(0xFF424769)), // Dark gray-blue for label
+                fillColor: Color(0xFFF0F0F0), // Light gray for the background
+                filled: true,
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF676F9D)), // Soft purple-blue border
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Color(0xFF424769)), // Dark gray-blue border when focused
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
             ),
+            SizedBox(height: 16),
+
+            // Dropdown to select a member
             DropdownButton<String>(
               value: _selectedMember,
-              hint: Text('Select Member to Split'),
+              hint: Text('Select Member to Split', style: TextStyle(color: Color(0xFF424769))),
               onChanged: (value) {
                 setState(() {
                   _selectedMember = value;
@@ -82,11 +116,19 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
               }).toList(),
             ),
             SizedBox(height: 20),
+
+            // Add Expense Button
             ElevatedButton(
               onPressed: _addExpense,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFF9B17A), // Soft orange color for the button
+                foregroundColor: Colors.white, // White text on button
+              ),
               child: Text('Add Expense'),
             ),
             SizedBox(height: 20),
+
+            // Display Expenses List
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance.collection('expenses').snapshots(),
@@ -103,10 +145,14 @@ class _MoneyLedgerPageState extends State<MoneyLedgerPage> {
                       return Card(
                         elevation: 5,
                         margin: EdgeInsets.symmetric(vertical: 10),
+                        color: Color(0xFF2D3250), // Darker gray-blue for card background
                         child: ListTile(
-                          title: Text(expense['description']),
-                          subtitle: Text('Amount: ₹${expense['amount']}'),
-                          trailing: Text('Settled: ${expense['settled'] ? "Yes" : "No"}'),
+                          title: Text(expense['description'], style: TextStyle(color: Colors.white)),
+                          subtitle: Text('Amount: ₹${expense['amount']}', style: TextStyle(color: Colors.white70)),
+                          trailing: Text(
+                            'Settled: ${expense['settled'] ? "Yes" : "No"}',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       );
                     },

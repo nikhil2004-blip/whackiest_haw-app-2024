@@ -10,9 +10,10 @@ class ExamRoomPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('CIE Chat Rooms'),
+        title: Text('Exam Central'),
         centerTitle: true,
-        backgroundColor: Colors.teal, // Changed to a more modern color
+        backgroundColor: Color(0xFF676F9D), // Soft purple-blue for app bar
+        foregroundColor: Colors.white, // White text in the app bar
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -24,6 +25,7 @@ class ExamRoomPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12), // Rounded corners
               ),
               margin: EdgeInsets.symmetric(vertical: 8),
+              color: Color(0xFFF9F9F9), // Light background for the card
               child: ListTile(
                 contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 title: Text(
@@ -31,9 +33,10 @@ class ExamRoomPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: Color(0xFF424769), // Dark gray for the title
                   ),
                 ),
-                trailing: Icon(Icons.arrow_forward, color: Colors.teal),
+                trailing: Icon(Icons.arrow_forward, color: Color(0xFF676F9D)), // Soft purple-blue for the arrow icon
                 onTap: () {
                   Navigator.push(
                     context,

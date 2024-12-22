@@ -48,30 +48,14 @@ class _GuardMapState extends State<GuardMap> {
   @override
   void initState() {
     super.initState();
-    //_lockOrientation();
     _loadZoneData();
     _setupRealTimeUpdates();
   }
 
   @override
   void dispose() {
-    //_unlockOrientation();
     super.dispose();
   }
-
-  // Future<void> _lockOrientation() async {
-  //   await SystemChrome.setPreferredOrientations([
-  //     DeviceOrientation.landscapeRight,
-  //     DeviceOrientation.landscapeLeft,
-  //   ]);
-  // }
-
-  // Future<void> _unlockOrientation() async {
-  //   await SystemChrome.setPreferredOrientations([
-  //     DeviceOrientation.portraitUp,
-  //     DeviceOrientation.portraitDown,
-  //   ]);
-  // }
 
   Future<void> _loadZoneData() async {
     try {
@@ -107,7 +91,7 @@ class _GuardMapState extends State<GuardMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFFFFFFFF), // White background
       body: LayoutBuilder(
         builder: (context, constraints) {
           const double imageAspectRatio = 2390 / 3816;
@@ -177,7 +161,7 @@ class _GuardMapState extends State<GuardMap> {
                                 : Colors.transparent,
                             border: Border.all(
                               color: (maskedZones[zone.id] ?? false)
-                                  ? Colors.black
+                                  ? Color(0xFF2D3250) // Accent Color (border)
                                   : Colors.transparent,
                               width: 2,
                             ),
@@ -186,8 +170,9 @@ class _GuardMapState extends State<GuardMap> {
                         if (guardLabels.containsKey(zone.id))
                           Text(
                             guardLabels[zone.id]!,
+
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Color(0xFF424769), // Text color
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
@@ -219,4 +204,3 @@ class Zone {
     required this.height,
   });
 }
-
