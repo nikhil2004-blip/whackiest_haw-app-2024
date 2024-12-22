@@ -8,10 +8,12 @@ class AssemblePage extends StatefulWidget {
   _AssemblePageState createState() => _AssemblePageState();
 }
 
-class _AssemblePageState extends State<AssemblePage> {
+class _AssemblePageState extends State<AssemblePage> with WidgetsBindingObserver{
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
   final TextEditingController _noteController = TextEditingController();
+
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   bool isAssembling = false;
@@ -23,6 +25,7 @@ class _AssemblePageState extends State<AssemblePage> {
     _initializeNotifications();
     _listenForAssembleMessages();
   }
+
 
   // Initialize local notifications
   Future<void> _initializeNotifications() async {
@@ -70,6 +73,7 @@ class _AssemblePageState extends State<AssemblePage> {
   // Trigger an assemble action
   Future<void> _assemble() async {
     String note = _noteController.text;
+
 
     // Update Firestore to trigger the message on all devices
     await _firestore.collection('assemble').doc('message').set({
@@ -141,8 +145,11 @@ class _AssemblePageState extends State<AssemblePage> {
             SizedBox(height: 20),
             Text('Enter the assembly note for all members:', style: TextStyle(fontSize: 18)),
             TextField(
+
               controller: _noteController, // Link TextField with controller
+
               decoration: InputDecoration(hintText: 'Enter note here'),
+
             ),
             SizedBox(height: 20),
             ElevatedButton(

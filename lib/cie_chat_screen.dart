@@ -94,15 +94,24 @@ class _CieChatScreenState extends State<CieChatScreen> {
     return _selectedFile != null
         ? Card(
       elevation: 4,
-      margin: EdgeInsets.all(8),
-      child: Column(
-        children: [
-          ListTile(
-            leading: Icon(Icons.insert_drive_file),
-            title: Text(_fileName ?? 'Selected File'),
-            subtitle: TextField(
+      margin: EdgeInsets.all(12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Selected File',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            SizedBox(height: 8),
+            Text(_fileName ?? 'No file selected'),
+            SizedBox(height: 16),
+            TextField(
               decoration: InputDecoration(
                 labelText: 'Add a description',
+                border: OutlineInputBorder(),
               ),
               onChanged: (value) {
                 setState(() {
@@ -110,14 +119,16 @@ class _CieChatScreenState extends State<CieChatScreen> {
                 });
               },
             ),
-          ),
-          ElevatedButton(
-            onPressed: _isUploading ? null : _uploadFile,
-            child: _isUploading
-                ? CircularProgressIndicator()
-                : Text('Send File'),
-          ),
-        ],
+            SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: _isUploading ? null : _uploadFile,
+              icon: _isUploading
+                  ? CircularProgressIndicator(strokeWidth: 2, color: Colors.white)
+                  : Icon(Icons.upload),
+              label: Text('Upload File'),
+            ),
+          ],
+        ),
       ),
     )
         : Container();
@@ -130,17 +141,21 @@ class _CieChatScreenState extends State<CieChatScreen> {
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return CircularProgressIndicator();
+        if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
         return ListView(
           children: snapshot.data!.docs.map((doc) {
-            return ListTile(
-              leading: Icon(Icons.attach_file),
-              title: Text(doc['fileName']),
-              subtitle: Text(doc['description']),
-              trailing: Icon(Icons.download),
-              onTap: () {
-                // Open the file link
-              },
+            return Card(
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              elevation: 2,
+              child: ListTile(
+                leading: Icon(Icons.attach_file),
+                title: Text(doc['fileName']),
+                subtitle: Text(doc['description']),
+                trailing: Icon(Icons.download, color: Theme.of(context).primaryColor),
+                onTap: () {
+                  // Open the file link
+                },
+              ),
             );
           }).toList(),
         );
@@ -151,7 +166,10 @@ class _CieChatScreenState extends State<CieChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(
+        title: Text(widget.title),
+        backgroundColor: Colors.indigo,
+      ),
       body: Column(
         children: [
           Expanded(child: _buildFileList()),
@@ -160,7 +178,8 @@ class _CieChatScreenState extends State<CieChatScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _pickFile,
-        child: Icon(Icons.add),
+        backgroundColor: Colors.indigo,
+        child: Icon(Icons.add, color: Colors.white),
       ),
     );
   }

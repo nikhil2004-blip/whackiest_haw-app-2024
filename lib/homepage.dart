@@ -15,10 +15,11 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final User? currentUser = FirebaseAuth.instance.currentUser;
   final TextEditingController _noteController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   bool isAssembling = false;
   String note = '';
@@ -27,6 +28,30 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _listenForAssembleMessages();
+
+    // Add lifecycle observer
+    WidgetsBinding.instance.addObserver(this);
+
+    // Ensure FocusNode is unfocused when returning to the screen
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNode.unfocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _noteController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _focusNode.unfocus();
+    }
+    super.didChangeAppLifecycleState(state);
   }
 
   // Listen for changes in Firestore
@@ -94,81 +119,86 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-      ),
-      drawer: AppDrawer(currentUser: currentUser),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 10),
-            // Emergency card if assembling
-            if (isAssembling)
-              Card(
-                color: Colors.red,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Emergency! Assembly Needed:',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        note,
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: _closeEmergency,
-                        child: Text('Close'),
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.red),
-                      ),
-                    ],
+    return GestureDetector(
+      onTap: () {
+        if (_focusNode.hasFocus) {
+          _focusNode.unfocus();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Home'),
+        ),
+        drawer: AppDrawer(currentUser: currentUser),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (isAssembling)
+                Card(
+                  color: Colors.red,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Emergency! Assembly Needed:',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          note,
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: _closeEmergency,
+                          child: Text('Close'),
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.red),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
+              SizedBox(height: 10),
+              Expanded(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  children: [
+                    _buildTile('Item Ledger', Icons.inventory_2, ItemLendingApp()),
+                    _buildTile('Money Ledger', Icons.attach_money, MoneyLedgerPage()),
+                    _buildTile('Chat Room', Icons.chat, ChatPage()),
+                    _buildTile('Exam Room', Icons.school, ExamRoomPage(userId: '')),
+                    _buildTile('Complaint Room', Icons.report_problem, ComplaintBoxApp()),
+                    _buildTile('Guard Tracking', Icons.map, GuardMap()),
+                  ],
+                ),
               ),
-            // Tile Style GridView
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
+              SizedBox(height: 20),
+              Row(
                 children: [
-                  _buildTile('Item Ledger', Icons.inventory_2, ItemLendingApp()),
-                  _buildTile('Money Ledger', Icons.attach_money, MoneyLedgerPage()),
-                  _buildTile('Chat Room', Icons.chat, ChatPage()),
-                  _buildTile('Exam Room', Icons.school, ExamRoomPage(userId: '',)),
-                  _buildTile('Complaint Room', Icons.report_problem, ComplaintBoxApp()),
-                  _buildTile('Guard Tracking', Icons.map, GuardMap()),
+                  Expanded(
+                    child: TextField(
+                      controller: _noteController,
+                      focusNode: _focusNode, // Linked FocusNode
+                      decoration: InputDecoration(hintText: 'Enter assembly note'),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  FloatingActionButton(
+                    onPressed: _assemble,
+                    child: Icon(Icons.campaign),
+                    backgroundColor: Colors.orangeAccent,
+                    tooltip: 'Assemble Now',
+                  ),
                 ],
               ),
-            ),
-            SizedBox(height: 20),
-            // Assemble Now button
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _noteController,
-                    decoration: InputDecoration(hintText: 'Enter assembly note'),
-                  ),
-                ),
-                SizedBox(width: 10),
-                FloatingActionButton(
-                  onPressed: _assemble,
-                  child: Icon(Icons.campaign),
-                  backgroundColor: Colors.orangeAccent,
-                  tooltip: 'Assemble Now',
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -177,7 +207,10 @@ class _HomePageState extends State<HomePage> {
   // Helper function to create a tile
   Widget _buildTile(String title, IconData icon, Widget page) {
     return GestureDetector(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => page)),
+      onTap: () {
+        _focusNode.unfocus(); // Unfocus before navigating
+        Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+      },
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
